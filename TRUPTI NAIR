@@ -1,0 +1,114 @@
+Easy level:-
+import java.util.Scanner;
+public class SquareRootCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        try {
+            System.out.print("Enter a number: ");
+            double number = Double.parseDouble(scanner.nextLine()); // Reading input            
+            if (number < 0) {
+                System.out.println("Error: Cannot calculate the square root of a negative number.");
+            } else {
+                double result = Math.sqrt(number);
+                System.out.println("The square root of " + number + " is: " + result);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Invalid input. Please enter a valid number.");
+        } finally {
+            scanner.close();
+        } } }
+
+Medium level:-
+import java.util.Scanner;
+class InvalidPinException extends Exception {
+    public InvalidPinException(String message) {
+        super(message);
+    }
+}
+class InsufficientBalanceException extends Exception {
+    public InsufficientBalanceException(String message) {
+        super(message);
+    }
+}
+public class ATMSystem {
+    private static final String CORRECT_PIN = "1234";
+    private static double balance = 5000.00; 
+    private static void validatePin(String enteredPin) throws InvalidPinException {
+        if (!enteredPin.equals(CORRECT_PIN)) {
+            throw new InvalidPinException("Error: Invalid PIN entered.");
+        } } 
+    private static void withdrawAmount(double amount) throws InsufficientBalanceException {
+        if (amount > balance) {
+            throw new InsufficientBalanceException("Error: Insufficient balance for this withdrawal.");
+        } else {
+            balance -= amount;
+            System.out.println("Withdrawal successful! Amount: " + amount);
+        }
+    }
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);        
+        System.out.print("Enter your PIN: ");
+        String enteredPin = scanner.nextLine();        
+        try {
+            validatePin(enteredPin);            
+            System.out.print("Enter the withdrawal amount: ");
+            double amount = scanner.nextDouble();
+            withdrawAmount(amount);
+
+        } catch (InvalidPinException e) {
+            System.out.println(e.getMessage());
+        } catch (InsufficientBalanceException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e.getMessage());
+        } finally {
+            System.out.println("Remaining balance: " + balance);
+            scanner.close();
+        } } }
+
+Hard level:- 
+import java.util.*;
+class CourseFullException extends Exception {
+    public CourseFullException(String message) {
+        super(message);
+    }
+}
+class PrerequisiteNotMetException extends Exception {
+    public PrerequisiteNotMetException(String message) {
+        super(message);
+    }
+}
+class Course {
+    String name;
+    int maxEnrollment;
+    List<String> prerequisites;
+    List<String> enrolledStudents = new ArrayList<>();
+    Course(String name, int maxEnrollment, List<String> prerequisites) {
+        this.name = name;
+        this.maxEnrollment = maxEnrollment;
+        this.prerequisites = prerequisites;
+    }
+
+    boolean enroll(String student, List<String> completedCourses) throws CourseFullException, PrerequisiteNotMetException {
+        if (!completedCourses.containsAll(prerequisites)) {
+            throw new PrerequisiteNotMetException("Prerequisite not met for " + name);
+        }
+        if (enrolledStudents.size() >= maxEnrollment) {
+            throw new CourseFullException(name + " is full.");
+        }
+        enrolledStudents.add(student);
+        return true;
+    }
+}
+public class UniversityEnrollment {
+    public static void main(String[] args) {
+        Course math = new Course("Math 101", 2, Arrays.asList("Basic Math"));
+        Course cs = new Course("CS 101", 1, Arrays.asList("Basic Math", "Programming"));
+        List<String> studentCourses = Arrays.asList("Basic Math");
+        try {
+            math.enroll("Student1", studentCourses);
+            cs.enroll("Student1", studentCourses); 
+        } catch (CourseFullException | PrerequisiteNotMetException e) {
+            System.out.println(e.getMessage());
+        } } }
+
